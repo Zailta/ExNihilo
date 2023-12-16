@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.DataObject.EXNUserDAOLayer;
 import com.blog.application.EXNEntity.EXNUserEntity;
+import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
 import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
 
 
@@ -31,7 +32,8 @@ public EXNUserBean createUser(EXNUserBean userBean) {
 @Override
 public EXNUserBean findById(String userID) {
 	
-	return null;
+	EXNUserEntity userEntity = exnUserDAOLayer.findById(userID).orElseThrow(()->new EXNResourceNotFoundException("User", "ID", userID));
+	return entityToBean(userEntity);
 }
 
 @Override
