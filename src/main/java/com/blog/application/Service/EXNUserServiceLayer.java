@@ -37,9 +37,15 @@ public EXNUserBean findById(String userID) {
 }
 
 @Override
-public EXNUserBean updateUser(String userID) {
-	// TODO Auto-generated method stub
-	return null;
+public EXNUserBean updateUser(String userID, EXNUserBean exnUserBean) {
+	EXNUserEntity userEntity = exnUserDAOLayer.findById(userID).orElseThrow(()->new EXNResourceNotFoundException("User", "ID", userID));
+	userEntity.setAbout(exnUserBean.getAbout());
+	userEntity.setFirstName(exnUserBean.getFirstName());
+	userEntity.setLastName(exnUserBean.getLastName());
+	userEntity.setUserName(exnUserBean.getUserName());
+	userEntity.setPassword(exnUserBean.getPassword());
+	EXNUserEntity updatedUser = exnUserDAOLayer.save(userEntity);
+	return entityToBean(updatedUser);
 }
 
 @Override
@@ -50,7 +56,7 @@ public EXNUserBean deleteUser(String userID) {
 
 @Override
 public List<EXNUserBean> findAll() {
-	// TODO Auto-generated method stub
+	Iterable<EXNUserEntity> findAll = exnUserDAOLayer.findAll();
 	return null;
 }
 
