@@ -1,6 +1,9 @@
 package com.blog.application.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +52,19 @@ public EXNUserBean updateUser(String userID, EXNUserBean exnUserBean) {
 }
 
 @Override
-public EXNUserBean deleteUser(String userID) {
-	// TODO Auto-generated method stub
-	return null;
+public void deleteUser(String userID) {
+	EXNUserEntity userEntity = exnUserDAOLayer.findById(userID).orElseThrow(()->new EXNResourceNotFoundException("User", "ID", userID));
+	exnUserDAOLayer.delete(userEntity);
+	
 }
 
 @Override
 public List<EXNUserBean> findAll() {
-	Iterable<EXNUserEntity> findAll = exnUserDAOLayer.findAll();
-	return null;
+	List<EXNUserEntity> findAll = (List<EXNUserEntity>) exnUserDAOLayer.findAll();
+	List<EXNUserBean> BeanList = findAll.stream().map(user->entityToBean(user)).collect(Collectors.toList());
+	return BeanList;
 }
+
 
 //utility methods
 public EXNUserEntity beanToEntity(EXNUserBean bean) {
