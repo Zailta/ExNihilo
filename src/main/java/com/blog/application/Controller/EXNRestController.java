@@ -19,6 +19,8 @@ import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.Service.EXNUserServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/api/users")
 public class EXNRestController {
@@ -27,7 +29,7 @@ public class EXNRestController {
 	
 	
 	@PostMapping(value = "/create")
-	public ResponseEntity<EXNUserBean> createUser(@RequestBody EXNUserBean bean){
+	public ResponseEntity<EXNUserBean> createUser(@Valid @RequestBody EXNUserBean bean){
 		EXNUserBean createUser = this.exnUserServiceLayer.createUser(bean);
 		return new ResponseEntity<>(createUser, HttpStatus.CREATED);
 		
@@ -49,7 +51,7 @@ public class EXNRestController {
 	}
 	
 	@PutMapping(value = "/{userID}")
-	public ResponseEntity<EXNUserBean> findUser(@PathVariable String userID, @RequestBody EXNUserBean bean ){
+	public ResponseEntity<EXNUserBean> updateUser(@PathVariable String userID, @Valid @RequestBody EXNUserBean bean ){
 		EXNUserBean updatedUser = this.exnUserServiceLayer.updateUser(userID.trim(), bean);
 		return  ResponseEntity.ok(updatedUser);
 		

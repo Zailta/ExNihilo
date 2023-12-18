@@ -1,12 +1,20 @@
 package com.blog.application.Bean;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 public class EXNUserBean {
 
 	private String Id;
+	@NotEmpty
 	private String userName;
+	@Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", message = "The password should be in following format: .Qwerty1 ")
 	private String password;
+	@NotEmpty
 	private String firstName;
+	@NotEmpty
 	private String lastName;
+	@NotEmpty
 	private String about;
 	
 	public EXNUserBean() {
