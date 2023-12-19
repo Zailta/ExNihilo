@@ -7,40 +7,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.application.Bean.EXNCategoryBean;
 import com.blog.application.Service.EXNCategoryServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 
-@RestController(value = "/api/categories")
+@RestController()
+@RequestMapping(value = "/api/categories")
 public class EXNCategoryController {
 	
 	@Autowired
 	EXNCategoryServiceLayer categoryServiceLayer;
-	@PostMapping
-	public ResponseEntity<EXNCategoryBean> createCategory(EXNCategoryBean categoryBean) {
+	
+	@PostMapping(value = "/create")
+	public ResponseEntity<EXNCategoryBean> createCategory(@RequestBody EXNCategoryBean categoryBean) {
 		EXNCategoryBean createUser = categoryServiceLayer.createUser(categoryBean);
 		return new ResponseEntity<EXNCategoryBean>(createUser, HttpStatus.OK);
 	}
-	@GetMapping
-	public ResponseEntity<EXNCategoryBean> findById(String categoryID) {
+	@GetMapping(value = "/{categoryID}")
+	public ResponseEntity<EXNCategoryBean> findById(@PathVariable String categoryID) {
 		EXNCategoryBean findById = categoryServiceLayer.findById(categoryID);
 		return new ResponseEntity<EXNCategoryBean>(findById, HttpStatus.OK);
 	}
-	@PutMapping
-	public ResponseEntity<EXNCategoryBean> updateCategory(String categoryID, EXNCategoryBean categoryBean) {
+	@PutMapping(value = "/{categoryID}")
+	public ResponseEntity<EXNCategoryBean> updateCategory(@PathVariable String categoryID, @RequestBody EXNCategoryBean categoryBean) {
 		EXNCategoryBean updateUser = categoryServiceLayer.updateUser(categoryID, categoryBean);
 		return new ResponseEntity<EXNCategoryBean>(updateUser, HttpStatus.OK);
 	}
-	@DeleteMapping
-	public ResponseEntity<EXNAPIResponse> deleteCategoryString (String categoryID) {
+	@DeleteMapping(value = "/{categoryID}")
+	public ResponseEntity<EXNAPIResponse> deleteCategoryString (@PathVariable String categoryID) {
 		categoryServiceLayer.deleteUser(categoryID);
 		return new ResponseEntity<EXNAPIResponse>(new EXNAPIResponse("The Category has been Deleted Successfully!!", true), HttpStatus.OK);
 	}
-	@GetMapping
+	@GetMapping(value = "/")
 	public ResponseEntity<List<EXNCategoryBean>>findAll(){
 		List<EXNCategoryBean> findAll = categoryServiceLayer.findAll();
 		return new ResponseEntity<List<EXNCategoryBean>>(findAll, HttpStatus.OK);

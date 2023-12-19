@@ -46,7 +46,9 @@ public class EXNCategoryServiceLayer implements EXNCategoryServiceInterface{
 	@Override
 	public EXNCategoryBean updateUser(String categoryID, EXNCategoryBean categoryBean) {
 		EXNCategoryEntity categoryEntity = categoryDAOlayer.findById(categoryID).orElseThrow(()->new EXNResourceNotFoundException("category", "ID", categoryID));
-		EXNCategoryEntity updatedCategory = categoryDAOlayer.save(beanToEntity(categoryBean));
+		categoryEntity.setCategory(categoryBean.getCategory());
+		categoryEntity.setCategoryDescription(categoryBean.getCategoryDescription());
+		EXNCategoryEntity updatedCategory = categoryDAOlayer.save(categoryEntity);
 		
 		return entityToBean(updatedCategory);
 	}
