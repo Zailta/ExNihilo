@@ -1,6 +1,7 @@
 package com.blog.application.Bean;
 
 public class EXNCategoryBean {
+	
 	private String categoryId;
 	private String category;
 	private String categoryDescription;

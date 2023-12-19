@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.blog.application.Bean.EXNCategoryBean;
 import com.blog.application.DataObject.EXNCategoryDAOlayer;
@@ -12,6 +13,7 @@ import com.blog.application.EXNEntity.EXNCategoryEntity;
 import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
 import com.blog.application.Service.ServiceInterfaces.EXNCategoryServiceInterface;
 
+@Service
 public class EXNCategoryServiceLayer implements EXNCategoryServiceInterface{
 	
 	@Autowired
