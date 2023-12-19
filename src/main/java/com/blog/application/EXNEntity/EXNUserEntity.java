@@ -1,9 +1,13 @@
 package com.blog.application.EXNEntity;
 
 import org.hibernate.annotations.UuidGenerator;
+import java.util.*;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class EXNUserEntity {
@@ -16,6 +20,8 @@ public class EXNUserEntity {
 	private String firstName;
 	private String lastName;
 	private String about;
+	@OneToMany(mappedBy = "exnUserEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<EXNPostsEntity> exnPosts = new ArrayList<>();
 	
 	
 	public EXNUserEntity() {
@@ -57,6 +63,12 @@ public class EXNUserEntity {
 	}
 	public void setAbout(String about) {
 		this.about = about;
+	}
+	public List<EXNPostsEntity> getExnPosts() {
+		return exnPosts;
+	}
+	public void setExnPosts(List<EXNPostsEntity> exnPosts) {
+		this.exnPosts = exnPosts;
 	}
 	
 	
