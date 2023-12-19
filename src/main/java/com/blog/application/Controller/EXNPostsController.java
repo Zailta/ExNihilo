@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.application.Bean.EXNPostsBean;
@@ -55,10 +56,24 @@ public class EXNPostsController {
 	}
 	
 	@GetMapping(value = "/")
-	public ResponseEntity<List<EXNPostsBean>> getPost(){
-		List<EXNPostsBean> findAll = exnPostsServiceLayer.findAll();		
+	public ResponseEntity<List<EXNPostsBean>> getPost(@RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber, @RequestParam(value = "pageSize",defaultValue = "2", required = false)Integer pageSize){
+		List<EXNPostsBean> findAll = exnPostsServiceLayer.findAll(pageNumber,pageSize);		
 		return ResponseEntity.ok(findAll);
 		
 	}
+	
+	@GetMapping(value = "/findbyuser/{userID}")
+	public ResponseEntity<List<EXNPostsBean>> getPostByUserID( @PathVariable String userID){
+		List<EXNPostsBean> findAll = exnPostsServiceLayer.getPostByUserID(userID);	
+		return ResponseEntity.ok(findAll);
+		
+	}
+	@GetMapping(value = "/findbycategory/{categoryID}")
+	public ResponseEntity<List<EXNPostsBean>> getPostCategoryID(@PathVariable String categoryID){
+		List<EXNPostsBean> findAll = exnPostsServiceLayer.getPostByCategoryId(categoryID);	
+		return ResponseEntity.ok(findAll);
+		
+	}
+	
 	
 }

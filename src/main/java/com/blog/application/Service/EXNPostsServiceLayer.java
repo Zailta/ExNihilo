@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blog.application.Bean.EXNCategoryBean;
@@ -86,8 +89,11 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 	}
 
 	@Override
-	public List<EXNPostsBean> findAll() {
-		List<EXNPostsEntity> findAll = (List<EXNPostsEntity>) this.exnPostsDAOLayer.findAll();
+	public List<EXNPostsBean> findAll(Integer pageNumber, Integer PageSize) {
+		 PageRequest pagination = PageRequest.of(pageNumber, PageSize);		
+		 Page<EXNPostsEntity> page = this.exnPostsDAOLayer.findAll(pagination);
+		 List<EXNPostsEntity> findAll = page.getContent();
+		 
 		List<EXNPostsBean> allPosts = findAll.stream().map(post->entityToBean(post)).collect(Collectors.toList());
 		return allPosts ;
 	}
