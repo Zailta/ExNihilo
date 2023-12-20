@@ -15,5 +15,6 @@ public interface EXNPostsDAOLayer  extends JpaRepository<EXNPostsEntity, String>
 	  List<EXNPostsEntity> findByexnUserEntity(EXNUserEntity userID);
 	  
 	  List<EXNPostsEntity> findBycategoryEntity(EXNCategoryEntity categoryID);
+	  List<EXNPostsEntity> findBypostContentContaining(String keyword);
 	 
 }

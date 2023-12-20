@@ -79,5 +79,14 @@ public class EXNPostsController {
 		
 	}
 	
+	@GetMapping(value = "/search/{keyword}")
+	public ResponseEntity<List<EXNPostsBean>> searchPost(@PathVariable String keyword){
+		List<EXNPostsBean> searchresults = exnPostsServiceLayer.searchPost(keyword);	
+		return ResponseEntity.ok(searchresults);
+		
+	}
+	
+	
+	
 	
 }

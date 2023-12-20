@@ -13,6 +13,7 @@ public interface EXNPostsServiceInterface {
 	EXNPostResponse findAll(Integer pageNumber, Integer PageSize, String sortBY);
 	List<EXNPostsBean> getPostByUserID(String userID);
 	List<EXNPostsBean> getPostByCategoryId(String categoryID);
+	List<EXNPostsBean> searchPost(String keyword);
 	
 
 }

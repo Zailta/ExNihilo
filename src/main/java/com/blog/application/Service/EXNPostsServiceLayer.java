@@ -122,6 +122,13 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 		return postByCategoryID;
 	}
 	
+	@Override
+	public List<EXNPostsBean> searchPost(String keyword) {
+		List<EXNPostsEntity> findBypostContentContaining = exnPostsDAOLayer.findBypostContentContaining(keyword);
+		List<EXNPostsBean> searchedPost = findBypostContentContaining.stream().map(post->entityToBean(post)).collect(Collectors.toList());
+		return searchedPost;
+	}
+	
 	//Utility Methods:
 			//utility methods
 			public EXNPostsEntity beanToEntity(EXNPostsBean bean) {
@@ -133,6 +140,8 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 				EXNPostsBean bean = this.modelMapper.map(entity, EXNPostsBean.class);
 				return bean;
 			}
+
+			
 
 
 
