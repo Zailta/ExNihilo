@@ -10,7 +10,7 @@ public interface EXNPostsServiceInterface {
 	EXNPostsBean findById(String postID);
 	EXNPostsBean updatePost(String postID, EXNPostsBean postBean, String userID, String categoryID);
 	void deletePost(String postID);
-	EXNPostResponse findAll(Integer pageNumber, Integer PageSize);
+	EXNPostResponse findAll(Integer pageNumber, Integer PageSize, String sortBY);
 	List<EXNPostsBean> getPostByUserID(String userID);
 	List<EXNPostsBean> getPostByCategoryId(String categoryID);
 	

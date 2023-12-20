@@ -8,12 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.blog.application.Bean.EXNCategoryBean;
 import com.blog.application.Bean.EXNPostsBean;
-import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.DataObject.EXNCategoryDAOlayer;
 import com.blog.application.DataObject.EXNPostsDAOLayer;
 import com.blog.application.DataObject.EXNUserDAOLayer;
@@ -90,8 +88,8 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 	}
 
 	@Override
-	public EXNPostResponse findAll(Integer pageNumber, Integer PageSize) {
-		 PageRequest pagination = PageRequest.of(pageNumber, PageSize);		
+	public EXNPostResponse findAll(Integer pageNumber, Integer PageSize, String sortBY) {
+		 PageRequest pagination = PageRequest.of(pageNumber, PageSize, Sort.by(sortBY));
 		 Page<EXNPostsEntity> page = this.exnPostsDAOLayer.findAll(pagination);
 		 List<EXNPostsEntity> findAll = page.getContent();
 		 

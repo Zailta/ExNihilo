@@ -41,7 +41,8 @@ public class EXNPostsController {
 	}
 	
 	@PutMapping(value = "/update/{postID}/{userID}/{categoryID}")
-	public ResponseEntity<EXNPostsBean> getPost(@PathVariable String postID,@PathVariable String userID, @PathVariable String categoryID, @RequestBody EXNPostsBean bean){
+	public ResponseEntity<EXNPostsBean> getPost(@PathVariable String postID,
+			@PathVariable String userID, @PathVariable String categoryID, @RequestBody EXNPostsBean bean){
 		EXNPostsBean updatePost = exnPostsServiceLayer.updatePost(postID, bean, userID, categoryID);	
 		
 		return ResponseEntity.ok(updatePost);
@@ -57,8 +58,10 @@ public class EXNPostsController {
 	}
 	
 	@GetMapping(value = "/")
-	public ResponseEntity<EXNPostResponse> getPost(@RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber, @RequestParam(value = "pageSize",defaultValue = "2", required = false)Integer pageSize){
-		 EXNPostResponse exnPostResponse = exnPostsServiceLayer.findAll(pageNumber,pageSize);		
+	public ResponseEntity<EXNPostResponse> getPost(@RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber, 
+			@RequestParam(value = "pageSize",defaultValue = "2", required = false)Integer pageSize,
+			@RequestParam(value = "sortBy",defaultValue = "postId", required = false)String sortBy){
+		 EXNPostResponse exnPostResponse = exnPostsServiceLayer.findAll(pageNumber,pageSize, sortBy);		
 		return ResponseEntity.ok(exnPostResponse);
 		
 	}
