@@ -22,6 +22,7 @@ import com.blog.application.EXNEntity.EXNPostsEntity;
 import com.blog.application.EXNEntity.EXNUserEntity;
 import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
 import com.blog.application.Service.ServiceInterfaces.EXNPostsServiceInterface;
+import com.blog.application.Utility.EXNPostResponse;
 
 @Service
 public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
@@ -89,13 +90,22 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 	}
 
 	@Override
-	public List<EXNPostsBean> findAll(Integer pageNumber, Integer PageSize) {
+	public EXNPostResponse findAll(Integer pageNumber, Integer PageSize) {
 		 PageRequest pagination = PageRequest.of(pageNumber, PageSize);		
 		 Page<EXNPostsEntity> page = this.exnPostsDAOLayer.findAll(pagination);
 		 List<EXNPostsEntity> findAll = page.getContent();
 		 
 		List<EXNPostsBean> allPosts = findAll.stream().map(post->entityToBean(post)).collect(Collectors.toList());
-		return allPosts ;
+		
+		EXNPostResponse exnPostResponse = new EXNPostResponse();
+		exnPostResponse.setPostList(allPosts);
+		exnPostResponse.setPageNumber(page.getNumber());
+		exnPostResponse.setPageSize(page.getSize());
+		exnPostResponse.setTotalElements(page.getTotalElements());
+		exnPostResponse.setTotalPages(page.getTotalPages());
+		exnPostResponse.setLastPage(page.isLast());
+		
+		return exnPostResponse ;
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.application.Bean.EXNPostsBean;
 import com.blog.application.Service.EXNPostsServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
+import com.blog.application.Utility.EXNPostResponse;
 
 @RestController
 @RequestMapping(value = "/api/posts")
@@ -56,9 +57,9 @@ public class EXNPostsController {
 	}
 	
 	@GetMapping(value = "/")
-	public ResponseEntity<List<EXNPostsBean>> getPost(@RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber, @RequestParam(value = "pageSize",defaultValue = "2", required = false)Integer pageSize){
-		List<EXNPostsBean> findAll = exnPostsServiceLayer.findAll(pageNumber,pageSize);		
-		return ResponseEntity.ok(findAll);
+	public ResponseEntity<EXNPostResponse> getPost(@RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber, @RequestParam(value = "pageSize",defaultValue = "2", required = false)Integer pageSize){
+		 EXNPostResponse exnPostResponse = exnPostsServiceLayer.findAll(pageNumber,pageSize);		
+		return ResponseEntity.ok(exnPostResponse);
 		
 	}
 	

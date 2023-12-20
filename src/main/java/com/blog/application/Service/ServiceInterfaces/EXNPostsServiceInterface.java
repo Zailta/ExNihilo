@@ -2,6 +2,7 @@ package com.blog.application.Service.ServiceInterfaces;
 
 import java.util.List;
 import com.blog.application.Bean.EXNPostsBean;
+import com.blog.application.Utility.EXNPostResponse;
 
 public interface EXNPostsServiceInterface {
 	
@@ -9,7 +10,7 @@ public interface EXNPostsServiceInterface {
 	EXNPostsBean findById(String postID);
 	EXNPostsBean updatePost(String postID, EXNPostsBean postBean, String userID, String categoryID);
 	void deletePost(String postID);
-	List<EXNPostsBean> findAll(Integer pageNumber, Integer PageSize);
+	EXNPostResponse findAll(Integer pageNumber, Integer PageSize);
 	List<EXNPostsBean> getPostByUserID(String userID);
 	List<EXNPostsBean> getPostByCategoryId(String categoryID);
 	
