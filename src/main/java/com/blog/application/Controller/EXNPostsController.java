@@ -1,6 +1,7 @@
 package com.blog.application.Controller;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.application.Bean.EXNPostsBean;
 import com.blog.application.Service.EXNPostsServiceLayer;
@@ -27,8 +30,10 @@ public class EXNPostsController {
 	@Autowired
 	EXNPostsServiceLayer exnPostsServiceLayer;
 	@PostMapping(value = "/create/{userID}/{categoryID}")
-	public ResponseEntity<EXNPostsBean> createPost(@PathVariable String userID, @PathVariable String categoryID, @RequestBody EXNPostsBean bean){
-		EXNPostsBean createPost = exnPostsServiceLayer.createPost(bean, userID, categoryID);		
+	public ResponseEntity<EXNPostsBean> createPost(@PathVariable String userID, @PathVariable String categoryID,
+			@RequestParam(value = "postContent") String postContent,
+			@RequestParam(value = "image" , required=false) MultipartFile file) throws IOException{
+		EXNPostsBean createPost = exnPostsServiceLayer.createPost(postContent, userID, categoryID, file);		
 		return new ResponseEntity<>(createPost, HttpStatus.OK);
 		
 	}
@@ -42,8 +47,10 @@ public class EXNPostsController {
 	
 	@PutMapping(value = "/update/{postID}/{userID}/{categoryID}")
 	public ResponseEntity<EXNPostsBean> getPost(@PathVariable String postID,
-			@PathVariable String userID, @PathVariable String categoryID, @RequestBody EXNPostsBean bean){
-		EXNPostsBean updatePost = exnPostsServiceLayer.updatePost(postID, bean, userID, categoryID);	
+			@PathVariable String userID, @PathVariable String categoryID, 
+			@RequestParam(value = "postContent") String postContent,
+			@RequestParam(value = "image" , required=false) MultipartFile file) throws IOException{
+		EXNPostsBean updatePost = exnPostsServiceLayer.updatePost(postID, postContent, userID, categoryID,file);	
 		
 		return ResponseEntity.ok(updatePost);
 		

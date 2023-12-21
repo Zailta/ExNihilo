@@ -4,9 +4,13 @@ import java.util.Date;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.blog.application.Bean.EXNFileProcessingServiceBean;
+
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 @Entity
 public class EXNPostsEntity {
@@ -15,7 +19,8 @@ public class EXNPostsEntity {
 	@UuidGenerator 
 	private String postId;
 	private String postContent;
-	private String image;
+	@Embedded
+	private EXNFileProcessingServiceBean image;
 	private Date publishedDate;
 	
 	@ManyToOne
@@ -44,11 +49,11 @@ public class EXNPostsEntity {
 		this.postContent = postContent;
 	}
 
-	public String getImage() {
+	public EXNFileProcessingServiceBean getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(EXNFileProcessingServiceBean image) {
 		this.image = image;
 	}
 

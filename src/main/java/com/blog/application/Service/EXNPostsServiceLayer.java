@@ -1,15 +1,17 @@
 package com.blog.application.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import com.blog.application.Bean.EXNFileProcessingServiceBean;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.application.Bean.EXNPostsBean;
 import com.blog.application.DataObject.EXNCategoryDAOlayer;
@@ -22,6 +24,8 @@ import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundExcept
 import com.blog.application.Service.ServiceInterfaces.EXNPostsServiceInterface;
 import com.blog.application.Utility.EXNPostResponse;
 
+import org.springframework.util.StringUtils;
+
 @Service
 public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 
@@ -33,16 +37,26 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 	EXNCategoryDAOlayer categoryDAOlayer;
 	@Autowired
 	private EXNUserDAOLayer exnUserDAOLayer;
+	@Autowired
+	private EXNPostsEntity createPost;
 	@Override
-	public EXNPostsBean createPost(EXNPostsBean postBean, String userID, String categoryID) {
+	public EXNPostsBean createPost(String postContent, String userID, String categoryID, MultipartFile file) throws IOException {
 		EXNUserEntity userEntity = exnUserDAOLayer.findById(userID).orElseThrow(()->new EXNResourceNotFoundException("User", "ID", userID));
 		EXNCategoryEntity categoryEntity = categoryDAOlayer.findById(categoryID).orElseThrow(()->new EXNResourceNotFoundException("category", "ID", categoryID));
-		EXNPostsEntity beanToEntity = this.beanToEntity(postBean);
-		beanToEntity.setPublishedDate(new Date());
-		beanToEntity.setExnUserEntity(userEntity);
-		beanToEntity.setCategoryEntity(categoryEntity);
+		createPost.setPostContent(postContent);
+		createPost.setPublishedDate(new Date());
+		createPost.setExnUserEntity(userEntity);
+		createPost.setCategoryEntity(categoryEntity);
+		if(!file.isEmpty()) {
+		EXNFileProcessingServiceBean fileprocessingBean = new EXNFileProcessingServiceBean();
+		fileprocessingBean.setFileContent(file.getBytes());
+		fileprocessingBean.setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
+		fileprocessingBean.setFilteType(file.getContentType());
+		fileprocessingBean.setFileSize(file.getSize());
+		createPost.setImage(fileprocessingBean);
+		}
 		
-		EXNPostsEntity savedPost = this.exnPostsDAOLayer.save(beanToEntity);
+		EXNPostsEntity savedPost = this.exnPostsDAOLayer.save(createPost);
 		EXNPostsBean userBean = entityToBean(savedPost);
 		/*
 		 * userBean.setExnUserBean(this.modelMapper.map(userEntity, EXNUserBean.class));
@@ -60,15 +74,22 @@ public class EXNPostsServiceLayer implements EXNPostsServiceInterface{
 	}
 
 	@Override
-	public EXNPostsBean updatePost(String postID, EXNPostsBean postBean, String userID, String categoryID) {
+	public EXNPostsBean updatePost(String postID, String postContent, String userID, String categoryID, MultipartFile file) throws IOException {
 		EXNUserEntity userEntity = exnUserDAOLayer.findById(userID).orElseThrow(()->new EXNResourceNotFoundException("User", "ID", userID));
 		EXNCategoryEntity categoryEntity = categoryDAOlayer.findById(categoryID).orElseThrow(()->new EXNResourceNotFoundException("category", "ID", categoryID));
 		EXNPostsEntity findByID = exnPostsDAOLayer.findById(postID).orElseThrow(()->new EXNResourceNotFoundException("Post", "ID", postID));
 		findByID.setCategoryEntity(categoryEntity);
 		findByID.setExnUserEntity(userEntity);
-		findByID.setPostContent(postBean.getPostContent());
+		findByID.setPostContent(postContent);
 		findByID.setPublishedDate(new Date());
-		findByID.setImage(postBean.getImage());
+		if(!file.isEmpty()) {
+		EXNFileProcessingServiceBean fileprocessingBean = new EXNFileProcessingServiceBean();
+		fileprocessingBean.setFileContent(file.getBytes());
+		fileprocessingBean.setFileName(StringUtils.cleanPath(file.getOriginalFilename()));
+		fileprocessingBean.setFilteType(file.getContentType());
+		fileprocessingBean.setFileSize(file.getSize());
+		findByID.setImage(fileprocessingBean);
+		}
 		EXNPostsEntity updatedPost = this.exnPostsDAOLayer.save(findByID);
 		EXNPostsBean postbeanConverted = entityToBean(updatedPost);;
 		/*

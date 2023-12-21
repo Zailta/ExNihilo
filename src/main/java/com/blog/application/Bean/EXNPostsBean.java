@@ -5,7 +5,7 @@ import java.util.Date;
 public class EXNPostsBean {
 	private String postId;
 	private String postContent;
-	private String image;
+	private EXNFileProcessingServiceBean image;
 	private Date publishedDate;
 	private EXNUserBean exnUserEntity;
 	private EXNCategoryBean categoryEntity;
@@ -22,10 +22,10 @@ public class EXNPostsBean {
 	public void setPostContent(String postContent) {
 		this.postContent = postContent;
 	}
-	public String getImage() {
+	public EXNFileProcessingServiceBean getImage() {
 		return image;
 	}
-	public void setImage(String image) {
+	public void setImage(EXNFileProcessingServiceBean image) {
 		this.image = image;
 	}
 	public Date getPublishedDate() {
