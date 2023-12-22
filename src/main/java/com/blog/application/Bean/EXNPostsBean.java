@@ -1,6 +1,10 @@
 package com.blog.application.Bean;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.blog.application.EXNEntity.EXNCommentEntity;
 
 public class EXNPostsBean {
 	private String postId;
@@ -9,6 +13,7 @@ public class EXNPostsBean {
 	private Date publishedDate;
 	private EXNUserBean exnUserEntity;
 	private EXNCategoryBean categoryEntity;
+	private Set<EXNCommentEntity>commentEntity =  new HashSet<EXNCommentEntity>();
 	
 	public String getPostId() {
 		return postId;
@@ -46,6 +51,13 @@ public class EXNPostsBean {
 	public void setCategoryEntity(EXNCategoryBean categoryEntity) {
 		this.categoryEntity = categoryEntity;
 	}
+	public Set<EXNCommentEntity> getCommentEntity() {
+		return commentEntity;
+	}
+	public void setCommentEntity(Set<EXNCommentEntity> commentEntity) {
+		this.commentEntity = commentEntity;
+	}
+	
 	
 
 }

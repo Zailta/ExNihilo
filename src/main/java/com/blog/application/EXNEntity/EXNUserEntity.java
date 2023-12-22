@@ -22,7 +22,8 @@ public class EXNUserEntity {
 	private String about;
 	@OneToMany(mappedBy = "exnUserEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<EXNPostsEntity> exnPosts = new ArrayList<>();
-	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<EXNCommentEntity>commentEntity =  new HashSet<EXNCommentEntity>();
 	
 	public EXNUserEntity() {
 		super();
@@ -69,6 +70,12 @@ public class EXNUserEntity {
 	}
 	public void setExnPosts(List<EXNPostsEntity> exnPosts) {
 		this.exnPosts = exnPosts;
+	}
+	public Set<EXNCommentEntity> getCommentEntity() {
+		return commentEntity;
+	}
+	public void setCommentEntity(Set<EXNCommentEntity> commentEntity) {
+		this.commentEntity = commentEntity;
 	}
 	
 	
