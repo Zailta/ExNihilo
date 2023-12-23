@@ -1,5 +1,8 @@
 package com.blog.application.Bean;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
@@ -16,6 +19,7 @@ public class EXNUserBean {
 	private String lastName;
 	@NotEmpty
 	private String about;
+	private Set<EXNCommentBean>commentEntity =  new HashSet<EXNCommentBean>();
 	
 	public EXNUserBean() {
 		super();
@@ -56,6 +60,12 @@ public class EXNUserBean {
 	}
 	public void setAbout(String about) {
 		this.about = about;
+	}
+	public Set<EXNCommentBean> getCommentEntity() {
+		return commentEntity;
+	}
+	public void setCommentEntity(Set<EXNCommentBean> commentEntity) {
+		this.commentEntity = commentEntity;
 	}
 	
 

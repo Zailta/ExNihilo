@@ -13,7 +13,7 @@ public class EXNPostsBean {
 	private Date publishedDate;
 	private EXNUserBean exnUserEntity;
 	private EXNCategoryBean categoryEntity;
-	private Set<EXNCommentEntity>commentEntity =  new HashSet<EXNCommentEntity>();
+	private Set<EXNCommentBean>commentEntity =  new HashSet<EXNCommentBean>();
 	
 	public String getPostId() {
 		return postId;
@@ -51,10 +51,10 @@ public class EXNPostsBean {
 	public void setCategoryEntity(EXNCategoryBean categoryEntity) {
 		this.categoryEntity = categoryEntity;
 	}
-	public Set<EXNCommentEntity> getCommentEntity() {
+	public Set<EXNCommentBean> getCommentEntity() {
 		return commentEntity;
 	}
-	public void setCommentEntity(Set<EXNCommentEntity> commentEntity) {
+	public void setCommentEntity(Set<EXNCommentBean> commentEntity) {
 		this.commentEntity = commentEntity;
 	}
 	
