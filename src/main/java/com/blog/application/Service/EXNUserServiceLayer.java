@@ -44,6 +44,7 @@ public EXNUserBean updateUser(String userID, EXNUserBean exnUserBean) {
 	userEntity.setLastName(exnUserBean.getLastName());
 	userEntity.setUserName(exnUserBean.getUserName());
 	userEntity.setPassword(exnUserBean.getPassword());
+	userEntity.setRole("ROLE_USER");
 	EXNUserEntity updatedUser = exnUserDAOLayer.save(userEntity);
 	return entityToBean(updatedUser);
 }

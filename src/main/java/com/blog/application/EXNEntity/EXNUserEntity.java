@@ -20,6 +20,7 @@ public class EXNUserEntity {
 	private String firstName;
 	private String lastName;
 	private String about;
+	private String role;
 	@OneToMany(mappedBy = "exnUserEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<EXNPostsEntity> exnPosts = new ArrayList<>();
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -77,6 +78,13 @@ public class EXNUserEntity {
 	public void setCommentEntity(Set<EXNCommentEntity> commentEntity) {
 		this.commentEntity = commentEntity;
 	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 	
 	
 }

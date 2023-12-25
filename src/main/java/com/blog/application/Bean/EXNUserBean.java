@@ -19,6 +19,7 @@ public class EXNUserBean {
 	private String lastName;
 	@NotEmpty
 	private String about;
+	private String role;
 	private Set<EXNCommentBean>commentEntity =  new HashSet<EXNCommentBean>();
 	
 	public EXNUserBean() {
@@ -66,6 +67,12 @@ public class EXNUserBean {
 	}
 	public void setCommentEntity(Set<EXNCommentBean> commentEntity) {
 		this.commentEntity = commentEntity;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 
