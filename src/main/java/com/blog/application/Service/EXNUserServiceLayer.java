@@ -62,6 +62,12 @@ public List<EXNUserBean> findAll() {
 	return BeanList;
 }
 
+@Override
+public EXNUserBean loadUserByUserName(String userName) {
+	EXNUserEntity findByuserName = exnUserDAOLayer.findByuserName(userName);
+	return entityToBean(findByuserName);
+}
+
 
 //utility methods
 public EXNUserEntity beanToEntity(EXNUserBean bean) {
@@ -73,4 +79,8 @@ public EXNUserBean entityToBean(EXNUserEntity entity) {
 	EXNUserBean bean = this.modelMapper.map(entity, EXNUserBean.class);
 	return bean;
 }
+
+
+
+
 }
