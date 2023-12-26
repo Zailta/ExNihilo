@@ -8,4 +8,5 @@ import com.blog.application.EXNEntity.EXNUserEntity;
 public interface EXNUserDAOLayer extends CrudRepository<EXNUserEntity, String>{
 	EXNUserEntity findByuserName(String userName);
 	
+	
 }

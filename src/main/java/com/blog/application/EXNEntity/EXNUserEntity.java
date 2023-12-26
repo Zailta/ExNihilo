@@ -4,6 +4,7 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.*;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -20,6 +21,7 @@ public class EXNUserEntity {
 	private String firstName;
 	private String lastName;
 	private String about;
+	@Column
 	private String role;
 	@OneToMany(mappedBy = "exnUserEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<EXNPostsEntity> exnPosts = new ArrayList<>();

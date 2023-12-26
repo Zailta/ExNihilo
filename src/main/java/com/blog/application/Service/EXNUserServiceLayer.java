@@ -5,41 +5,40 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.blog.application.Bean.EXNUserAuthenticationBean;
 import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.DataObject.EXNUserDAOLayer;
 import com.blog.application.EXNEntity.EXNUserEntity;
 import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
-import com.blog.application.Security.JWTAuthentication.JWTTokenHelper;
 import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
 
 
 
 @Service
-public class EXNUserServiceLayer implements EXNUserServieInterface{
+public class EXNUserServiceLayer implements EXNUserServieInterface, UserDetailsService{
 @Autowired
 private EXNUserDAOLayer exnUserDAOLayer;
 @Autowired
 private ModelMapper modelMapper;
+@Autowired
+private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-@Autowired
-private JWTTokenHelper jwtTokenHelper;
-@Autowired
-private UserDetailsService detailsService;
-@Autowired
-private AuthenticationManager authenticationManager;
 
 @Override
 public EXNUserBean createUser(EXNUserBean userBean) {
+	
 	EXNUserEntity entity = beanToEntity(userBean);
+	entity.setRole("ROLE_USER");
+	entity.setPassword(bCryptPasswordEncoder.encode(userBean.getPassword()));
 	EXNUserEntity savedUser = exnUserDAOLayer.save(entity);
+	
 	return this.entityToBean(savedUser);
 }
 
@@ -83,16 +82,16 @@ public EXNUserBean loadUserByUserName(String userName) {
 	return entityToBean(findByuserName);
 }
 
-@Override
-public String generateToken(EXNUserAuthenticationBean authenticationBean) {
+
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	EXNUserEntity findByuserName = exnUserDAOLayer.findByuserName(username);
+	if (findByuserName == null) {
+		throw  new EXNResourceNotFoundException("User", "Name", username);
+	}
+	SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(findByuserName.getRole());
 	
-	Authentication authenticate = authenticationManager.
-			authenticate(new UsernamePasswordAuthenticationToken(authenticationBean.getUserName(), authenticationBean.getPassword()));
-	SecurityContextHolder.getContext().setAuthentication(authenticate);
+	return new User(username, findByuserName.getPassword(), List.of(simpleGrantedAuthority));
 	
-	String token  = jwtTokenHelper.generateToken(authenticate);
-	
-	return token;
 }
 
 //utility methods
@@ -105,6 +104,8 @@ public EXNUserBean entityToBean(EXNUserEntity entity) {
 	EXNUserBean bean = this.modelMapper.map(entity, EXNUserBean.class);
 	return bean;
 }
+
+
 
 
 

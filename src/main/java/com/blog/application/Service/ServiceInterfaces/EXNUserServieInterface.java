@@ -10,6 +10,5 @@ public interface EXNUserServieInterface {
 	void deleteUser(String userID);
 	List<EXNUserBean> findAll();
 	EXNUserBean loadUserByUserName(String userName);
-	String generateToken(EXNUserAuthenticationBean authenticationBean);
 	
 }
