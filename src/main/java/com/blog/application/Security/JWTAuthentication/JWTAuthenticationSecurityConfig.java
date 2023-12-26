@@ -25,17 +25,17 @@ public class JWTAuthenticationSecurityConfig {
 	JWTAuthenticationFilter authenticationFilter;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity,HandlerMappingIntrospector introspector)
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, HandlerMappingIntrospector introspector)
 			throws Exception {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-            authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/login")).permitAll();
-          authorize.anyRequest().authenticated();
-      }).exceptionHandling(exception->{
-    	  exception.authenticationEntryPoint(authenticationEntryPoint);
-      }).sessionManagement(sessionManagement->{
-    	  sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-      }).addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/generateToken")).permitAll();
+			authorize.anyRequest().authenticated();
+		}).exceptionHandling(exception -> {
+			exception.authenticationEntryPoint(authenticationEntryPoint);
+		}).sessionManagement(sessionManagement -> {
+			sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		}).addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return httpSecurity.build();
 	}

@@ -5,12 +5,19 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.blog.application.Bean.EXNUserAuthenticationBean;
 import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.DataObject.EXNUserDAOLayer;
 import com.blog.application.EXNEntity.EXNUserEntity;
 import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
+import com.blog.application.Security.JWTAuthentication.JWTTokenHelper;
 import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
 
 
@@ -21,6 +28,13 @@ public class EXNUserServiceLayer implements EXNUserServieInterface{
 private EXNUserDAOLayer exnUserDAOLayer;
 @Autowired
 private ModelMapper modelMapper;
+
+@Autowired
+private JWTTokenHelper jwtTokenHelper;
+@Autowired
+private UserDetailsService detailsService;
+@Autowired
+private AuthenticationManager authenticationManager;
 
 @Override
 public EXNUserBean createUser(EXNUserBean userBean) {
@@ -69,6 +83,17 @@ public EXNUserBean loadUserByUserName(String userName) {
 	return entityToBean(findByuserName);
 }
 
+@Override
+public String generateToken(EXNUserAuthenticationBean authenticationBean) {
+	
+	Authentication authenticate = authenticationManager.
+			authenticate(new UsernamePasswordAuthenticationToken(authenticationBean.getUserName(), authenticationBean.getPassword()));
+	SecurityContextHolder.getContext().setAuthentication(authenticate);
+	
+	String token  = jwtTokenHelper.generateToken(authenticate);
+	
+	return token;
+}
 
 //utility methods
 public EXNUserEntity beanToEntity(EXNUserBean bean) {
@@ -80,6 +105,8 @@ public EXNUserBean entityToBean(EXNUserEntity entity) {
 	EXNUserBean bean = this.modelMapper.map(entity, EXNUserBean.class);
 	return bean;
 }
+
+
 
 
 
