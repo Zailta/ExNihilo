@@ -13,9 +13,10 @@ public class EXNUserDetailsService implements UserDetailsService{
 
 	@Autowired
 	EXNUserDAOLayer exnUserDaoLayer;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		EXNUserEntity findByuserName = exnUserDaoLayer.findByuserName(username);
+		 EXNUserEntity findByuserName = exnUserDaoLayer.findByuserName(username);
 		if (findByuserName == null) {
 
 			throw new UsernameNotFoundException("The User does not Exist in the DB");

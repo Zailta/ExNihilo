@@ -1,5 +1,6 @@
 package com.blog.application.Security.JWTAuthentication;
 
+import org.springframework.context.annotation.Lazy ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,11 @@ public class JWTAuthenticationSecurityConfig {
 	@Autowired
 	JWTAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
+	@Lazy
 	JWTAuthenticationFilter authenticationFilter;
-	@Bean	
-	public UserDetailsService getUserDetailsService() {
+	 
+	@Bean
+	public UserDetailsService getuserDetailsService() {
 		return new EXNUserDetailsService();
 	}
 	
@@ -41,7 +44,7 @@ public class JWTAuthenticationSecurityConfig {
 	@Bean
 	public DaoAuthenticationProvider getDaoAuthenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(getUserDetailsService());
+		authenticationProvider.setUserDetailsService(getuserDetailsService());
 		authenticationProvider.setPasswordEncoder(getPasswordEncoder());
 		return authenticationProvider;
 	}

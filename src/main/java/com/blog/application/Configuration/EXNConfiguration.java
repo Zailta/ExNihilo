@@ -3,8 +3,10 @@ package com.blog.application.Configuration;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.blog.application.EXNEntity.EXNPostsEntity;
+import com.blog.application.Security.UserConfig.EXNUserDetailsService;
 
 @Configuration
 public class EXNConfiguration {
@@ -18,5 +20,7 @@ public class EXNConfiguration {
 	public EXNPostsEntity geteXNPostsEntity() {
 		return new EXNPostsEntity();
 	}
+	
+	
 
 }

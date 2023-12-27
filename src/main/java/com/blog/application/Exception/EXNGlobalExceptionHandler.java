@@ -32,10 +32,15 @@ public class EXNGlobalExceptionHandler {
 			String defaultMessage = ((FieldError)error).getDefaultMessage();
 			errormap.put(field, defaultMessage);
 		});
-		return new ResponseEntity<>(errormap, HttpStatus.BAD_REQUEST);
-				
-				
+		return new ResponseEntity<>(errormap, HttpStatus.BAD_REQUEST);			
 		
+	}
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<EXNAPIResponse> exception(Exception ex){
+		String message = ex.getMessage();
+		EXNAPIResponse exnapiResponse = new EXNAPIResponse(message, false);
+		
+		return new ResponseEntity<>(exnapiResponse, HttpStatus.NOT_FOUND);
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.blog.application.Security.JWTAuthentication;
 
 import java.io.IOException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,24 +13,29 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.blog.application.Security.UserConfig.EXNUserDetailsService;
-import com.blog.application.Service.EXNUserServiceLayer;
-import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
+import com.blog.application.Exception.CustomExceptions.EXNResourceNotFoundException;
 
+import org.springframework.context.annotation.Lazy ;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+
 public class JWTAuthenticationFilter extends OncePerRequestFilter{
-	@Autowired
-	JWTTokenHelper jwtTokenHelper;
 	
-	EXNUserDetailsService userDetailsService;
+	JWTTokenHelper jwtTokenHelper;
+	UserDetailsService userDetailsService;
+	
+	@Autowired
+    public JWTAuthenticationFilter(JWTTokenHelper jwtTokenHelper, @Lazy UserDetailsService userDetailsService) {
+        this.jwtTokenHelper = jwtTokenHelper;
+        this.userDetailsService = userDetailsService;
+    }
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+			throws ServletException, IOException, EXNResourceNotFoundException {
 		
 		String token = null;
 		String userName = null;
@@ -37,22 +43,26 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 		if(tokenheader!=null && tokenheader.startsWith("Bearer")) {
 			
 			
+			
 			 token = tokenheader.substring(7);			 
 		}else {
-			System.out.println("Invalid Token Header");
+			throw new EXNResourceNotFoundException("Token", "value", "Null");
 			
 		}
 		
 		if(StringUtils.hasText(token) && jwtTokenHelper.validateToken(token)) {
 			 userName = jwtTokenHelper.getUsername(token);
 			 if(userName!=null && SecurityContextHolder.getContext().getAuthentication() == null) {
-				 UserDetails loadUserByUsername = userDetailsService.loadUserByUsername(userName);
+				 UserDetails loadUserByUsername = this.userDetailsService.loadUserByUsername(userName);
 				 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loadUserByUsername, null,loadUserByUsername.getAuthorities());
 				 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			 }
+			 else {
+				 throw new EXNResourceNotFoundException("Token", "ID",token);
+			 }
 			 }else {
-				 System.out.println("Invalid Token");
+				 throw new EXNResourceNotFoundException("Token", "ID",token);
 			 }
 		
 	filterChain.doFilter(request, response);	
