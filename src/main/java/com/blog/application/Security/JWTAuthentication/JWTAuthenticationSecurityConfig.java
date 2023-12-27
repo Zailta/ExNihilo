@@ -57,6 +57,7 @@ public class JWTAuthenticationSecurityConfig {
 			throws Exception {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/users/create")).permitAll();
 			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll();
 			authorize.requestMatchers(HttpMethod.GET).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {
