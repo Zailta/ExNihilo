@@ -1,6 +1,11 @@
 package com.blog.application.EXNEntity;
 
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.*;
 
 import jakarta.persistence.CascadeType;
@@ -11,7 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class EXNUserEntity {
+public class EXNUserEntity{
 
 	@Id
 	@UuidGenerator
@@ -86,7 +91,6 @@ public class EXNUserEntity {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
 	
 	
 }

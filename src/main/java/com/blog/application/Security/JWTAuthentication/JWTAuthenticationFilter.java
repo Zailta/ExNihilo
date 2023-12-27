@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.blog.application.Security.UserConfig.EXNUserDetailsService;
+import com.blog.application.Service.EXNUserServiceLayer;
+import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,10 +26,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	@Autowired
 	JWTTokenHelper jwtTokenHelper;
 	
-	UserDetailsService userDetailsService;
+	EXNUserDetailsService userDetailsService;
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		
 		String token = null;
 		String userName = null;
 		String tokenheader = request.getHeader("Authorization");
@@ -35,6 +40,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 			 token = tokenheader.substring(7);			 
 		}else {
 			System.out.println("Invalid Token Header");
+			
 		}
 		
 		if(StringUtils.hasText(token) && jwtTokenHelper.validateToken(token)) {

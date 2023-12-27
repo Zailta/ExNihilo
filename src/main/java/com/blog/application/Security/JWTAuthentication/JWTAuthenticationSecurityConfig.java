@@ -27,11 +27,12 @@ public class JWTAuthenticationSecurityConfig {
 	JWTAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
 	JWTAuthenticationFilter authenticationFilter;
-	
-	@Bean
+	@Bean	
 	public UserDetailsService getUserDetailsService() {
 		return new EXNUserDetailsService();
 	}
+	
+	
 	@Bean
 	public BCryptPasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -40,7 +41,7 @@ public class JWTAuthenticationSecurityConfig {
 	@Bean
 	public DaoAuthenticationProvider getDaoAuthenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(this.getUserDetailsService());
+		authenticationProvider.setUserDetailsService(getUserDetailsService());
 		authenticationProvider.setPasswordEncoder(getPasswordEncoder());
 		return authenticationProvider;
 	}
@@ -49,10 +50,7 @@ public class JWTAuthenticationSecurityConfig {
 			throws Exception {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll();
-		}).authorizeHttpRequests((authorize) -> {
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/**")).permitAll().anyRequest().authenticated();
-
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {
 			exception.authenticationEntryPoint(authenticationEntryPoint);
 		}).sessionManagement(sessionManagement -> {

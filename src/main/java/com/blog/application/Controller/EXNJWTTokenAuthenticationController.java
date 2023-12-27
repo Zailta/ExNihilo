@@ -35,7 +35,6 @@ public class EXNJWTTokenAuthenticationController {
 		String token  = jwtTokenHelper.generateToken(authenticate);
 		JWTAuthenticationResponse authenticationResponse = new JWTAuthenticationResponse();
 		authenticationResponse.setToken(token);
-		System.out.println(token);
 		
 		return new ResponseEntity<JWTAuthenticationResponse>(authenticationResponse, HttpStatus.OK);
 	}

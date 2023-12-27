@@ -22,7 +22,7 @@ import com.blog.application.Service.ServiceInterfaces.EXNUserServieInterface;
 
 
 @Service
-public class EXNUserServiceLayer implements EXNUserServieInterface, UserDetailsService{
+public class EXNUserServiceLayer implements EXNUserServieInterface{
 @Autowired
 private EXNUserDAOLayer exnUserDAOLayer;
 @Autowired
@@ -82,17 +82,6 @@ public EXNUserBean loadUserByUserName(String userName) {
 	return entityToBean(findByuserName);
 }
 
-
-public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	EXNUserEntity findByuserName = exnUserDAOLayer.findByuserName(username);
-	if (findByuserName == null) {
-		throw  new EXNResourceNotFoundException("User", "Name", username);
-	}
-	SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(findByuserName.getRole());
-	
-	return new User(username, findByuserName.getPassword(), List.of(simpleGrantedAuthority));
-	
-}
 
 //utility methods
 public EXNUserEntity beanToEntity(EXNUserBean bean) {
