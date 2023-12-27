@@ -38,7 +38,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException, EXNResourceNotFoundException {
-		try {
 		String token = null;
 		String userName = null;
 		String tokenheader = request.getHeader("Authorization");
@@ -48,7 +47,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 			
 			 token = tokenheader.substring(7);			 
 		}else {
-			throw new EXNResourceNotFoundException("Token", "value", "Null");
+			System.out.println("Token header is Not valid");
 			
 		}
 		
@@ -61,30 +60,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 				 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			 }
 			 else {
-				 throw new EXNResourceNotFoundException("Token", "ID",token);
+				 System.out.println("User is Null!");
 			 }
 			 }else {
-				 throw new EXNResourceNotFoundException("Token", "ID",token);
+				 System.out.println("Token validation Failed!");
 			 }
 		
 	filterChain.doFilter(request, response);
-	} catch (EXNResourceNotFoundException ex) {
-        // Handle the exception and send a proper JSON response
-		String errorMessage = ex.getMessage();
-	    int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
-	    String timestamp = Instant.now().toString();
-	    String uuid = UUID.randomUUID().toString();
-
-	    response.setStatus(statusCode);
-	    response.setContentType("application/json");
-
-	    String jsonResponse = String.format("{\"message\": \"%s\", \"statusCode\": %d, \"timestamp\": \"%s\", \"tracker\": \"%s\"}",
-	            errorMessage, statusCode, timestamp, uuid);
-
-	    response.getWriter().write(jsonResponse);
-    }
+	} 
 	}
 	
 	
 
-}
+

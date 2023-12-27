@@ -1,6 +1,7 @@
 package com.blog.application.Security.JWTAuthentication;
 
 import org.springframework.context.annotation.Lazy ;
+import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +54,8 @@ public class JWTAuthenticationSecurityConfig {
 			throws Exception {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll().anyRequest().authenticated();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll();
+			authorize.requestMatchers(HttpMethod.GET).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {
 			exception.authenticationEntryPoint(authenticationEntryPoint);
 		}).sessionManagement(sessionManagement -> {
