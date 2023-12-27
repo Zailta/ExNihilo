@@ -1,10 +1,12 @@
 package com.blog.application.Security.JWTAuthentication;
 
 import java.io.IOException;
-
+import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	
 	JWTTokenHelper jwtTokenHelper;
 	UserDetailsService userDetailsService;
+	@Autowired
+    JWTAuthenticationEntryPoint authenticationEntryPoint;
 	
 	@Autowired
     public JWTAuthenticationFilter(JWTTokenHelper jwtTokenHelper, @Lazy UserDetailsService userDetailsService) {
@@ -36,7 +40,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException, EXNResourceNotFoundException {
-		
+		try {
 		String token = null;
 		String userName = null;
 		String tokenheader = request.getHeader("Authorization");
@@ -65,7 +69,24 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 				 throw new EXNResourceNotFoundException("Token", "ID",token);
 			 }
 		
-	filterChain.doFilter(request, response);	
+	filterChain.doFilter(request, response);
+	} catch (EXNResourceNotFoundException ex) {
+        // Handle the exception and send a proper JSON response
+		String errorMessage = ex.getMessage();
+	    int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
+	    String timestamp = Instant.now().toString();
+	    String uuid = UUID.randomUUID().toString();
+
+	    response.setStatus(statusCode);
+	    response.setContentType("application/json");
+
+	    String jsonResponse = String.format("{\"message\": \"%s\", \"statusCode\": %d, \"timestamp\": \"%s\", \"tracker\": \"%s\"}",
+	            errorMessage, statusCode, timestamp, uuid);
+
+	    response.getWriter().write(jsonResponse);
+    }
 	}
+	
+	
 
 }
