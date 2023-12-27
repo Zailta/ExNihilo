@@ -29,8 +29,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 	
 	JWTTokenHelper jwtTokenHelper;
 	UserDetailsService userDetailsService;
-	@Autowired
-    JWTAuthenticationEntryPoint authenticationEntryPoint;
 	
 	@Autowired
     public JWTAuthenticationFilter(JWTTokenHelper jwtTokenHelper, @Lazy UserDetailsService userDetailsService) {
