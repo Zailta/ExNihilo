@@ -19,17 +19,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import com.blog.application.Security.UserConfig.EXNUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalAuthentication // For enabling admin level roles 
-@EnableWebMvc
+@EnableGlobalAuthentication
 public class JWTAuthenticationSecurityConfig {
-	private  static final String [] PUBLIC_URLS = {"/api/users/create","/api/token/generateToken", "/v3/api-docs", "/v2/api-docs","/swagger-resources/**","/swagger-ui/**, /webjars/**",""};
 	
 	@Autowired
 	JWTAuthenticationEntryPoint authenticationEntryPoint;
@@ -60,7 +57,13 @@ public class JWTAuthenticationSecurityConfig {
 			throws Exception {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-			authorize.requestMatchers(PUBLIC_URLS).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/v3/api-docs")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/v2/api-docs")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/swagger-resources/**")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/webjars/**")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/users/create")).permitAll();
+			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll();
 			authorize.requestMatchers(HttpMethod.GET).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {
 			exception.authenticationEntryPoint(authenticationEntryPoint);
