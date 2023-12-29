@@ -1,15 +1,14 @@
 package com.blog.application.Security.JWTAuthentication;
 
-import org.springframework.context.annotation.Lazy ;
-import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy ;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -53,18 +52,19 @@ public class JWTAuthenticationSecurityConfig {
 		return authenticationProvider;
 	}
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, HandlerMappingIntrospector introspector)
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity)
 			throws Exception {
-		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
+		
 		httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/v3/api-docs")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/v2/api-docs")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/swagger-resources/**")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/webjars/**")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/users/create")).permitAll();
-			authorize.requestMatchers(mvcMatcherBuilder.pattern("/api/token/generateToken")).permitAll();
-			authorize.requestMatchers(HttpMethod.GET).permitAll().anyRequest().authenticated();
+			authorize.requestMatchers(
+		            "/v3/api-docs/**",
+		            "/v2/api-docs",
+		            "/swagger-resources/**",
+		            "/swagger-ui/**",
+		            "/webjars/**",
+		            "/api/users/create",
+		            "/api/token/generateToken"
+		        ).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {
 			exception.authenticationEntryPoint(authenticationEntryPoint);
 		}).sessionManagement(sessionManagement -> {
