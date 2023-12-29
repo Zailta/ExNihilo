@@ -17,8 +17,13 @@ import com.blog.application.Security.JWTAuthentication.JWTAuthenticationResponse
 import com.blog.application.Security.JWTAuthentication.JWTTokenHelper;
 import com.blog.application.Service.EXNUserServiceLayer;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/token")
+@Tag(
+		name = "Authentication Token Generator",
+		description = "	TOKEN-API can be consumed to Generate Tokens for Authentication")
 public class EXNJWTTokenAuthenticationController {
 	
 	@Autowired

@@ -24,8 +24,15 @@ import com.blog.application.Service.EXNPostsServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 import com.blog.application.Utility.EXNPostResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(value = "/api/posts")
+@SecurityRequirement(name = "authBearer")
+@Tag(
+		name = "Posts",
+		description = "	POST-API can be consumed to perform CRUD Operations on Blog posts")
 public class EXNPostsController {
 	@Autowired
 	EXNPostsServiceLayer exnPostsServiceLayer;

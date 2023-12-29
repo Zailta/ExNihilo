@@ -62,7 +62,6 @@ public class JWTAuthenticationSecurityConfig {
 		            "/swagger-resources/**",
 		            "/swagger-ui/**",
 		            "/webjars/**",
-		            "/api/users/create",
 		            "/api/token/generateToken"
 		        ).permitAll().anyRequest().authenticated();
 		}).exceptionHandling(exception -> {

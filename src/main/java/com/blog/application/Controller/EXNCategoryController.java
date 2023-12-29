@@ -18,8 +18,15 @@ import com.blog.application.Bean.EXNCategoryBean;
 import com.blog.application.Service.EXNCategoryServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController()
 @RequestMapping(value = "/api/categories")
+@SecurityRequirement(name = "authBearer")
+@Tag(
+		name = "Categories",
+		description = "	CATEGORY-API can be consumed to perform CRUD Operations on Blog Categories")
 public class EXNCategoryController {
 	
 	@Autowired

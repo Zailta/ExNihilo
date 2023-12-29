@@ -20,10 +20,16 @@ import com.blog.application.Bean.EXNUserBean;
 import com.blog.application.Service.EXNUserServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/users")
+@SecurityRequirement(name = "authBearer")
+@Tag(
+		name = "Users",
+		description = "	USER-API can be consumed to perform CRUD Operations on Blog Users")
 public class EXNRestController {
 	@Autowired
 	EXNUserServiceLayer exnUserServiceLayer;

@@ -14,8 +14,15 @@ import com.blog.application.Bean.EXNCommentBean;
 import com.blog.application.Service.EXNCommentServiceLayer;
 import com.blog.application.Utility.EXNAPIResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(value = "/api/comments")
+@SecurityRequirement(name = "authBearer")
+@Tag(
+		name = "Comments",
+		description = "	COMMENT-API can be consumed to perform CRUD Operations on Blog comments")
 public class EXNCommentController {
 	
 	@Autowired
