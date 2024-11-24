@@ -102,7 +102,7 @@
 												<blockquote>
 													<table>
 													<tr>
-														<td><b><a href='./ExNihilo/blob/master/src\main\java\com\blog\application\ExNihiloApplication.java'>ExNihiloApplication.java</a></b></td>
+														<td><b><a href='./ExNihilo/src\main\java\com\blog\application\ExNihiloApplication.java'>ExNihiloApplication.java</a></b></td>
 														<td><code>❯ REPLACE-ME</code></td>
 													</tr>
 													<tr>
